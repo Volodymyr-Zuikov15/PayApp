@@ -1,26 +1,31 @@
+const twilio = require('twilio');
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
-const jwt = require("jsonwebtoken");
+
+// const accountSid = 'your_account_sid';  // Replace with your Twilio Account SID
+// const authToken = 'your_auth_token';    // Replace with your Twilio Auth Token
+// const client = new twilio(accountSid, authToken);
 
 const register = async (req, res) => {
-  const { email, username, password } = req.body;
-
+  const { email, username, name, surname, mobile,  password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
-
-    // Create the super admin user linked to the company
     const user = new User({
+      name,
+      surname,
       username,
+      mobile,
       email,
       password,
       role: 'user',
     });
     await user.save();
 
-    const token = generateToken(user._id); // Generate token for the user
+    const token = generateToken(user._id);
     res.status(201).json({ token });
   } catch (error) {
     console.error(error);
@@ -38,12 +43,30 @@ const login = async (req, res) => {
   
   const resData = {
     _id: user._id,
+    name: user.name,
+    surname: user.surname,
     username: user.username,
+    mobile: user.mobile,
     email: user.email,
     role: user.role
   };
 
   res.json({ token, resData });
+};
+
+const generateVerificationCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+};
+
+const sendVerificationCode = async (req, res) => {
+  const { mobile } = req.body;
+  const code = generateVerificationCode();
+  // const sid = await client.messages.create({
+  //   body: `Your verification code is ${code}`,
+  //   to: mobile,
+  //   from: twilioPhoneNumber
+  // });
+  res.json({ code: "411211" });
 };
 const getUserDetails = async (req, res) => {
   try {
@@ -77,4 +100,4 @@ const getUserDetails = async (req, res) => {
   }
 };
 
-module.exports = { register, login, getUserDetails };
+module.exports = { register, login, getUserDetails, sendVerificationCode };
