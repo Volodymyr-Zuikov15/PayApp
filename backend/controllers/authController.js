@@ -3,10 +3,9 @@ const generateToken = require("../utils/generateToken");
 const jwt = require("jsonwebtoken");
 
 const register = async (req, res) => {
-  const { email, password, name } = req.body;
+  const { email, username, password } = req.body;
 
   try {
-    // Check if a user with the same email exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
@@ -14,15 +13,15 @@ const register = async (req, res) => {
 
     // Create the super admin user linked to the company
     const user = new User({
-      name,
+      username,
       email,
       password,
-      role,
+      role: 'user',
     });
     await user.save();
 
     const token = generateToken(user._id); // Generate token for the user
-    res.status(201).json({ token, user });
+    res.status(201).json({ token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -36,7 +35,15 @@ const login = async (req, res) => {
     return res.status(401).json({ message: "Invalid credentials" });
 
   const token = generateToken(user._id);
-  res.json({ token, user });
+  
+  const resData = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    role: user.role
+  };
+
+  res.json({ token, resData });
 };
 const getUserDetails = async (req, res) => {
   try {
