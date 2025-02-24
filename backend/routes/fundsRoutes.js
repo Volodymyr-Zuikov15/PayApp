@@ -9,8 +9,8 @@ const { authenticate, authorize } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.post("/transfer", transferFunds);
-router.post("/withdraw", withdrawFunds);
-router.get("/getfunds", getFundsData);
+router.post("/transfer", authenticate, transferFunds);
+router.post("/withdraw", authenticate, withdrawFunds);
+router.get("/getfunds", authenticate, getFundsData);
 
 module.exports = router;

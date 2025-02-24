@@ -54,6 +54,17 @@ const login = async (req, res) => {
   res.json({ token, resData });
 };
 
+const logout = (req, res) => {
+  res.cookie("token", "", { 
+    httpOnly: true, 
+    expires: new Date(0), 
+    secure: process.env.NODE_ENV === "production", 
+    sameSite: "strict" 
+  });
+  
+  res.status(200).json({ message: "Logged out successfully" });
+};
+
 const generateVerificationCode = () => {
   return Math.floor(100000 + Math.random() * 900000).toString();
 };
@@ -68,36 +79,5 @@ const sendVerificationCode = async (req, res) => {
   // });
   res.json({ code: "411211" });
 };
-const getUserDetails = async (req, res) => {
-  try {
-    const authHeader = req.headers.authorization; // Extract the Authorization header
-    if (!authHeader) {
-      // If no Authorization header is provided
-      return res.status(401).json({ message: "Authorization header missing" });
-    }
 
-    const token = authHeader.split(" ")[1]; // Extract the token part after 'Bearer'
-    if (!token || token === "null") {
-      // If the token is null or not provided
-      return res.status(401).json({ message: "Token is invalid or missing" });
-    }
-
-    // Verify the token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    // const user = await User.findById() // Fetch user data
-    const user = await User.findById(decoded.id)
-      .populate("company")
-      .select("-password")
-      .exec();
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    res.json({ user });
-  } catch (error) {
-    console.error("Error:", error);
-    return res.status(500).json({ message: "Server error" });
-  }
-};
-
-module.exports = { register, login, getUserDetails, sendVerificationCode };
+module.exports = { register, login, logout, sendVerificationCode };

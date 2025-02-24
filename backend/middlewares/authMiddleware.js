@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-// Middleware to verify token and attach user and company details to the request
 const authenticate = async (req, res, next) => {
   const token = req.headers.authorization?.split(" ")[1];
 
@@ -27,7 +26,6 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-// Middleware to validate roles
 const authorize = (requiredRoles) => {
   return (req, res, next) => {
     const { role } = req.user;
