@@ -21,7 +21,7 @@ app.use("/api/funds", fundsRoutes);
 
 app.use("/api/users", userRoutes);
 
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 8000;
 let server;
 connectDB().then(async () => {
   server = app.listen(PORT, "0.0.0.0", () => {
