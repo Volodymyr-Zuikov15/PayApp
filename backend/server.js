@@ -21,10 +21,10 @@ app.use("/api/funds", fundsRoutes);
 
 app.use("/api/users", userRoutes);
 
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 443;
 let server;
 connectDB().then(async () => {
   server = app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${process.env.SERVER_URL || "https://mapex.fun"}:${PORT}`);
+    console.log(`Server running on port ${process.env.SERVER_URL || "http://mapex.fun"}:${PORT}`);
   });
 });
