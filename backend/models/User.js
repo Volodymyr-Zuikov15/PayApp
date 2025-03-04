@@ -1,19 +1,32 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const userSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  surname: { type: String, required: true },
-  username: { type: String, required: true },
-  mobile: { type: String, required: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
-  role: {
-    type: String,
-    required: true,
-    enum: ["superadmin", "user"],
-    default: "user",
+    firstname: { type: String, required: true },
+    secondname: { type: String, required: true },
+    username: { type: String, required: true },
+    phone: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    avatar: { type: String,default: null },
+    role: {
+      type: String,
+      required: true,
+      enum: ["superadmin", "user"],
+      default: "user",
+    },
+    plan: {
+      type: String,
+      required: true,
+      enum: ["none", "starter", "silver", "gold", "platinium"],
+      default: "none",
+    },
+    btc_bep20_amount: { type: Number, required: true, default: 0 },
+    eth_erc20_amount: { type: Number, required: true, default: 0 },
+    mac_amount: { type: Number, required: true, default: 0 },
+    total_amount: { type: Number, required: true, default: 0 },
   },
-});
+  { timestamps: true }
+);
 
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();

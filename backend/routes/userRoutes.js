@@ -1,14 +1,14 @@
 const express = require("express");
 const {
-  createUser,
-  updateManager,
-  deleteUser,
+    updateUser,
+    avatarUser
 } = require("../controllers/userController");
-const { authenticate, authorize } = require("../middlewares/authMiddleware");
+const { validateUpdateUser, validateAvatarUser } = require("../validators/userValidator");
+const { authenticate } = require("../middlewares/authMiddleware");
+
 const router = express.Router();
 
-router.post("/", authenticate, createUser);
-router.put("/:id", authenticate, updateManager);
-router.delete("/:id", authenticate, deleteUser);
+router.put("/update/:id", [authenticate, validateUpdateUser], updateUser);
+router.put("/avatar/:id", [authenticate, validateAvatarUser], avatarUser);
 
 module.exports = router;

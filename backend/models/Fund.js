@@ -18,7 +18,7 @@ const fundSchema = new mongoose.Schema(
     },
     user: { type: String, required: true }
   },
-  { timestamps: true } // Add this line to enable timestamps
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("Fund", fundSchema);

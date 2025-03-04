@@ -1,6 +1,12 @@
+const { validationResult } = require("express-validator");
 const Fund = require("../models/Fund");
 
 const transferFunds = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { account, idNumber, amount, user_id } = req.body;
 
     try {
@@ -20,6 +26,11 @@ const transferFunds = async (req, res) => {
 }
 
 const withdrawFunds = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { idNumber, amount, user_id } = req.body;
 
     try {
@@ -39,6 +50,11 @@ const withdrawFunds = async (req, res) => {
 }
 
 const getFundsData = async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    
     const user_id = req.query.user_id;
     try {
         const funds = await Fund.find({ user: user_id});

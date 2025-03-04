@@ -1,3 +1,4 @@
+const { validationResult } = require("express-validator");
 const twilio = require('twilio');
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
@@ -8,17 +9,23 @@ const generateToken = require("../utils/generateToken");
 // const client = new twilio(accountSid, authToken);
 
 const register = async (req, res) => {
-  const { email, username, name, surname, mobile,  password } = req.body;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { firstname, secondname, username, birth_date, phone, email, password } = req.body;
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "User already exists" });
     }
     const user = new User({
-      name,
-      surname,
+      firstname,
+      secondname,
       username,
-      mobile,
+      birth_date,
+      phone,
       email,
       password,
       role: 'user',
@@ -26,7 +33,7 @@ const register = async (req, res) => {
     await user.save();
 
     const token = generateToken(user._id);
-    res.status(201).json({ token });
+    res.status(201).json({ message: "Registered successfully", token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -34,6 +41,11 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
   const { email, password } = req.body;
   const user = await User.findOne({ email });
   if (!user || !(await user.matchPassword(password)))
@@ -43,15 +55,17 @@ const login = async (req, res) => {
   
   const resData = {
     _id: user._id,
-    name: user.name,
-    surname: user.surname,
+    firstname: user.firstname,
+    secondname: user.secondname,
     username: user.username,
-    mobile: user.mobile,
+    birth_date: user.birth_date,
+    phone: user.phone,
     email: user.email,
-    role: user.role
+    role: user.role,
+    avatar: user.avatar || null,
   };
 
-  res.json({ token, resData });
+  res.status(200).json({ message: "Logged in successfully", token, resData });
 };
 
 const logout = (req, res) => {
