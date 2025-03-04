@@ -67,6 +67,7 @@ const login = async (req, res) => {
     eth_erc20_amount: user.eth_erc20_amount,
     mac_amount: user.mac_amount,
     total_amount: user.total_amount,
+    activeStatus: user.activeStatus,
   };
 
   res.status(200).json({ message: "Logged in successfully", token, resData });

@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema({
     eth_erc20_amount: { type: Number, required: true, default: 0 },
     mac_amount: { type: Number, required: true, default: 0 },
     total_amount: { type: Number, required: true, default: 0 },
+    activeStatus: { type: Boolean, default: false }
   },
   { timestamps: true }
 );
