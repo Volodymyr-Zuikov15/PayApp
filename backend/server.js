@@ -10,8 +10,9 @@ const authRoutes = require("./routes/authRoutes");
 const fundsRoutes = require("./routes/fundsRoutes");
 const userRoutes = require("./routes/userRoutes");
 const adminRoutes = require("./routes/adminRoutes"); // Admin Part
-const { createDefaultUser } = require('./config/adminUser'); // Admin Part
-createDefaultUser(); // Admin User Create
+const { createDefaultUser, createDefaultPlan } = require('./config/admin'); // Admin Part
+createDefaultUser(); // Super Admin User Create
+createDefaultPlan(); // Plan Create
 
 const app = express();
 app.use(cors());

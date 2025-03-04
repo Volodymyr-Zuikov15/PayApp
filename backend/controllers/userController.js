@@ -77,7 +77,7 @@ const upload = multer({
   },
 }).single("avatar"); // Single file upload with field name 'avatar'
 
-const avatarUser = (req, res) => {
+const avatarUser = async (req, res) => {
   upload(req, res, async (err) => {
       if (err) {
           return res.status(400).json({ message: err.message });
@@ -99,6 +99,5 @@ const avatarUser = (req, res) => {
       }
   });
 };
-
 
 module.exports = { updateUser, avatarUser };

@@ -13,10 +13,11 @@ const fundSchema = new mongoose.Schema(
     method: {
       type: String,
       required: true,
-      enum: ["Transfer", "Withdraw", "Income"],
+      enum: ["Transfer", "Withdraw", "Exchange", "ActivatePlan"],
       default: "Transfer",
     },
-    user: { type: String, required: true }
+    user: { type: String, required: true },
+    read_status: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

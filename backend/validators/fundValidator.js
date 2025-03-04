@@ -21,8 +21,19 @@ const validateGetFundsData = [
   query("user_id").notEmpty().withMessage("User ID is required"),
 ];
 
+const validateActivateUserPlan = [
+  query("id").notEmpty().withMessage("User ID is required"),
+  body("plan").notEmpty().withMessage("Plan is required"),
+];
+
+const validateDeleteNotification = [
+  query("id").notEmpty().withMessage("Notification ID is required"),
+];
+
 module.exports = {
   validateTransferFunds,
   validateWithdrawFunds,
   validateGetFundsData,
+  validateActivateUserPlan,
+  validateDeleteNotification
 };

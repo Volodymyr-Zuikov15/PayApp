@@ -63,6 +63,11 @@ const login = async (req, res) => {
     email: user.email,
     role: user.role,
     avatar: user.avatar || null,
+    plan: user.plan,
+    btc_bep20_amount: user.btc_bep20_amount,
+    eth_erc20_amount: user.eth_erc20_amount,
+    mac_amount: user.mac_amount,
+    total_amount: user.total_amount,
   };
 
   res.status(200).json({ message: "Logged in successfully", token, resData });
